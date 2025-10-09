@@ -12,6 +12,7 @@ def webhook():
         return 'Invalid token'
 
     elif request.method == 'POST':
+<<<<<<< HEAD
         try:
             data = request.json
             message = data['entry'][0]['changes'][0]['value']['messages'][0]
@@ -48,6 +49,29 @@ def send_whatsapp_message(to, message):
     url = "https://graph.facebook.com/v19.0/8626968538561715/messages"
     headers = {
         "Authorization": "Bearer EAAVPkFwL6B0BPhReC1Ivj8FZAZBmsBk3xJlKZCT2JrKPJAKVJZANwEeOwaPsA73trF16kV9ZBLXWnx1GuGLHBSD92SszzVBXfMfHunrjD7ZBqA83Ackeet1B5oJayiug4mO6FgV3Bas0TTO0j00DMrTtn3ePy4LoN8ZBnDgR8Va6XwwRBGr1quZBJmZBDpFSZBTV6A3pOgoNNl6hqoIt0DM9rXtZCPbWiO82IZAvmaXMmhZCzpYik2QZDZD",
+=======
+        data = request.json
+        message = data['entry'][0]['changes'][0]['value']['messages'][0]
+        text = message['text']['body'].strip().lower()
+        sender = message['from']
+
+        if "registration sheet" in text:
+            sheet_url = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec'  # Replace with your actual Google Apps Script URL
+            sheet_data = requests.get(sheet_url).json()
+
+            reply = "📋 Registration Sheet:\n"
+            for entry in sheet_data[-5:]:  # last 5 entries
+                reply += f"- {entry['Name']} | {entry['Phone']} | {entry['Email']}\n"
+
+            send_whatsapp_message(sender, reply)
+
+        return 'OK'
+
+def send_whatsapp_message(to, message):
+    url = "https://graph.facebook.com/v19.0/YOUR_PHONE_NUMBER_ID/messages"  # Replace with your actual Phone Number ID
+    headers = {
+        "Authorization": "Bearer YOUR_ACCESS_TOKEN",  # Replace with your temporary access token
+>>>>>>> e228ea15b0ad95e6a765ea179b13b031584eb1f6
         "Content-Type": "application/json"
     }
     payload = {
@@ -56,5 +80,9 @@ def send_whatsapp_message(to, message):
         "type": "text",
         "text": {"body": message}
     }
+<<<<<<< HEAD
     response = requests.post(url, headers=headers, json=payload)
     print(f"📤 WhatsApp API response: {response.status_code} - {response.text}")  # ✅ Delivery logging
+=======
+    requests.post(url, headers=headers, json=payload)
+>>>>>>> e228ea15b0ad95e6a765ea179b13b031584eb1f6
